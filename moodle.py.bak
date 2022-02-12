@@ -61,9 +61,9 @@ def collect_data():
             # print("Ничего не изменилось")
             # print(f"{cource['fullname']} \n" )
         elif diff > 0:
-            clientf.query(
-                query.update(query.select('ref', query.get(query.match(query.index("courses_by_id"), cource['id']))),
-                             {'data': {'count': real_count}}))
+            # clientf.query(
+            #     query.update(query.select('ref', query.get(query.match(query.index("courses_by_id"), cource['id']))),
+            #                  {'data': {'count': real_count}}))
 
             tasks_list = tasks_list[-diff:]
 
