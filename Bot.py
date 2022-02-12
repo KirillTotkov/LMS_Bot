@@ -36,11 +36,13 @@ async def run(message: types.Message):
         print("Начали рассылку")
 
         while True:
-            users = get_users()
-            tasks_list = collect_data()
-            #print(users)
-            for user in users:
-                try:
+
+            if collect_data()!=1:
+                tasks_list = collect_data()
+                users = get_users()
+                # print(users)
+                for user in users:
+                    # try:
                     for task in tasks_list:
                         if 'description' in task.keys():
                             message = f'{task["fullname"]}\n{task["name"]}\n{task["link"]}\n{task["description"]}'
@@ -55,10 +57,13 @@ async def run(message: types.Message):
                         if int(user['active']) != 1:
                             set_acive(user['user_id'], 1)
 
-                except:
-                    set_acive(user['user_id'], 0)
-                    print("ERROR")
-            await asyncio.sleep(20)
+                    # except:
+                    #     set_acive(user['user_id'], 0)
+                    #     print("ERROR")
+                await asyncio.sleep(20)
+
+            else:
+                print("НИЧЕГО НЕ ИЗМЕНИЛОСЬ\n")
 
 
 def main():
