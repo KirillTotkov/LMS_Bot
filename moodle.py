@@ -57,7 +57,8 @@ def collect_data():
         diff = real_count - old_count
 
         if diff == 0:
-            return 1
+            pass
+            # return False
             # print("Ничего не изменилось")
             # print(f"{cource['fullname']} \n" )
         elif diff > 0:
@@ -70,10 +71,11 @@ def collect_data():
             for i in tasks_list:
                 i['fullname'] = cource['fullname']
 
-
-            return tasks_list
+            answer_data.append(tasks_list)
         else:
             print("ERROR Moodle.py \n")
+
+    return answer_data
 
 
 def main():
