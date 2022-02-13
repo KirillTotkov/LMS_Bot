@@ -64,6 +64,7 @@ async def run(message: types.Message):
                             print("ERROR BLOCK \n")
                 else:
                     print("НИЧЕГО НЕ ИЗМЕНИЛОСЬ")
+                    await bot.send_message(271175530, "НИЧЕГО НЕ ИЗМЕНИЛОСЬ")
                 # await asyncio.sleep(20)
                 await asyncio.sleep(3600)
 
