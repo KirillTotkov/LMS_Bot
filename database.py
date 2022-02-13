@@ -35,9 +35,9 @@ def get_users():
     res = clientf.query(query.map_(query.lambda_("x", query.get(query.var('x'))),
                                    query.paginate(query.match(query.index('get_all_users')))))
 
-    data=[x['data'] for x in res['data']]
+    data = [x['data'] for x in res['data']]
 
-    for i  in data:
+    for i in data:
         del i['user_name']
 
     return data

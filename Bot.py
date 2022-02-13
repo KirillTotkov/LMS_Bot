@@ -38,40 +38,32 @@ async def run(message: types.Message):
 
         while True:
             answer_data = collect_data()
-            if answer_data != False:
-                # print(answer_data)
-                if len(answer_data) != 0:
-                    users = get_users()
-                    for user in users:
-                        try:
-                            for tasks in answer_data:
-                                for task in tasks:
-                                    if 'description' in task.keys():
-                                        message = f'{task["fullname"]}\n{task["name"]}\n{task["link"]}\n{task["description"]}'
-                                        await bot.send_message(user['user_id'], message)
-                                    elif 'link' not in task.keys():
-                                        message = f'{task["fullname"]}\n{task["name"]}\n'
-                                        await bot.send_message(user['user_id'], message)
-                                    else:
-                                        message = f'{task["fullname"]}\n{task["name"]}\n{task["link"]}'
-                                        await bot.send_message(user['user_id'], message)
+            if len(answer_data) != 0:
+                users = get_users()
+                for user in users:
+                    try:
+                        for task in answer_data:
+                            if 'description' in task.keys():
+                                message = f'{task["fullname"]}\n{task["name"]}\n{task["link"]}\n{task["description"]}'
+                                await bot.send_message(user['user_id'], message)
+                            elif 'link' not in task.keys():
+                                message = f'{task["fullname"]}\n{task["name"]}\n'
+                                await bot.send_message(user['user_id'], message)
+                            else:
+                                message = f'{task["fullname"]}\n{task["name"]}\n{task["link"]}'
+                                await bot.send_message(user['user_id'], message)
 
-                            if int(user['active']) != 1:
-                                set_acive(user['user_id'], 1)
+                        if int(user['active']) != 1:
+                            set_acive(user['user_id'], 1)
 
-                        except:
-                            set_acive(user['user_id'], 0)
-                            print("ERROR BLOCK \n")
-                else:
-                    print("НИЧЕГО НЕ ИЗМЕНИЛОСЬ")
-                    await bot.send_message(271175530, "НИЧЕГО НЕ ИЗМЕНИЛОСЬ")
-                # await asyncio.sleep(20)
-                await asyncio.sleep(3600)
-
+                    except:
+                        set_acive(user['user_id'], 0)
+                        print("ERROR BLOCK \n")
             else:
-                print("НИЧЕГО НЕ ИЗМЕНИЛОСЬ\n")
-                await asyncio.sleep(20)
-
+                print("НИЧЕГО НЕ ИЗМЕНИЛОСЬ")
+                await bot.send_message(271175530, "НИЧЕГО НЕ ИЗМЕНИЛОСЬ")
+            # await asyncio.sleep(20)
+            await asyncio.sleep(3600)
 
 def main():
     executor.start_polling(dp)

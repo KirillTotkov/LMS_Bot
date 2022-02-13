@@ -23,6 +23,7 @@ def get_count_in_lms(id):
             if 'description' not in j.keys():
                 tasks_list.append(
                     {
+                        'id': j['id'],
                         'name': j['name'],
                         'link': j['url']
                     }
@@ -30,6 +31,7 @@ def get_count_in_lms(id):
             elif j['modname'] == 'label':
                 tasks_list.append(
                     {
+                        'id': j['id'],
                         'name': j['name']
                     }
                 )
@@ -38,6 +40,7 @@ def get_count_in_lms(id):
                 soup = BeautifulSoup(description, 'lxml').text
                 tasks_list.append(
                     {
+                        'id': j['id'],
                         'name': j['name'],
                         'link': j['url'],
                         'description': soup
@@ -52,28 +55,20 @@ def collect_data():
     for cource in data:
         tasks_list = get_count_in_lms(cource['id'])
 
-        old_count = cource['count']
-        real_count = len(tasks_list)
-        diff = real_count - old_count
+        id_tasks = [x['id'] for x in tasks_list]  # id заданий с Moodle
+        diff_id = list(set(cource['id_tasks']) ^ set(id_tasks))  # id новых заданий
 
-        if diff == 0:
-            pass
-            # return False
-            # print("Ничего не изменилось")
-            # print(f"{cource['fullname']} \n" )
-        elif diff > 0:
+        if len(diff_id) > 0:
+            for task in tasks_list:
+                id = task['id']
+                for new_id in diff_id:
+                    if id == new_id:
+                        task['fullname'] = cource['fullname']
+                        answer_data.append(task)
+
             clientf.query(
                 query.update(query.select('ref', query.get(query.match(query.index("courses_by_id"), cource['id']))),
-                             {'data': {'count': real_count}}))
-
-            tasks_list = tasks_list[-diff:]
-
-            for i in tasks_list:
-                i['fullname'] = cource['fullname']
-
-            answer_data.append(tasks_list)
-        else:
-            print("ERROR Moodle.py \n")
+                             {'data': {'id_tasks': id_tasks}}))
 
     return answer_data
 
