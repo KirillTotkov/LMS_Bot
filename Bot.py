@@ -43,7 +43,7 @@ async def run(message: types.Message):
                             if 'description' in task.keys():
                                 message = f'{task["fullname"]}\n{task["name"]}\n{task["link"]}\n{task["description"]}'
                                 await bot.send_message(user['user_id'], message)
-                            elif task['summary']!='':
+                            elif 'summary' in task:
                                 message=f'{task["summary"]}'
                                 await bot.send_message(user['user_id'], message)
                             elif 'link' not in task.keys():
