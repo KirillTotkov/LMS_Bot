@@ -12,18 +12,6 @@ lmskey = os.environ['LMSKEY']
 clientf = FaunaClient(fauna_key)
 data = get_all_cource()
 
-
-# def get_number_courses():
-#     request = f'https://lms.syktsu.ru/webservice/rest/server.php?wstoken={lmskey}' \
-#               f'&wsfunction=core_course_get_enrolled_courses_by_timeline_classification&' \
-#               f'classification=all&moodlewsrestformat=json'
-#
-#     result = requests.get(request, headers={"User-Agent": "Mozilla/5.0"})
-#     all_cource = result.json()['courses']
-#     print(len(data))
-#     return len(all_cource)
-# get_number_courses()
-
 def get_count_in_lms(id):
     request = f'https://lms.syktsu.ru/webservice/rest/server.php?wstoken={lmskey}&' \
               f'wsfunction=core_course_get_contents&courseid={id}&moodlewsrestformat=json'
@@ -89,14 +77,7 @@ def collect_data():
 
         id_tasks = [x['id'] for x in tasks_list]  # id заданий с Moodle
         diff_id = list(set(cource['id_tasks']) ^ set(id_tasks))  # id новых заданий
-        # try:
-        #     diff_id = list(set(cource['id_tasks']) ^ set(id_tasks))  # id новых заданий
-        # except:
-        #     print("ERRROORORR")
-        #     clientf.query(
-        #         query.update(query.select('ref', query.get(query.match(query.index("courses_by_id"), cource['id']))),
-        #                      {'data': {'id_tasks': id_tasks}}))
-
+     
         real_count = len(tasks_list)
         if real_count!=cource['count']:
             clientf.query(
