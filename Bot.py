@@ -40,6 +40,7 @@ async def run(message: types.Message):
                 for user in users:
                     try:
                         for task in answer_data:
+                            print(task)
                             if 'description' in task.keys():
                                 message = f'{task["fullname"]}\n{task["name"]}\n{task["link"]}\n{task["description"]}'
                                 await bot.send_message(user['user_id'], message)
