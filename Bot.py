@@ -36,7 +36,6 @@ async def run(message: types.Message):
         while True:
             answer_data = collect_data()
             if len(answer_data) != 0:
-                print(answer_data)
                 users = get_users()
                 for user in users:
                     try:
@@ -65,7 +64,7 @@ async def run(message: types.Message):
                 print("НИЧЕГО НЕ ИЗМЕНИЛОСЬ\n")
                 await bot.send_message(271175530, "НИЧЕГО НЕ ИЗМЕНИЛОСЬ")
             # await asyncio.sleep(20)
-            await asyncio.sleep(3600)
+            await asyncio.sleep(1800)
     else:
         await message.answer('Неизвестная команда')
 
