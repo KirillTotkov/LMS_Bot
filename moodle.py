@@ -105,13 +105,10 @@ def collect_data():
                         task['fullname'] = cource['fullname']
                         answer_data.append(task)
             real_count = len(tasks_list)
-            if len(id_tasks) < len(cource['id_tasks']):
-                print("ERROR MOODLE.py")
-                clientf.query(
-                    query.update(
-                        query.select('ref', query.get(query.match(query.index("courses_by_id"), cource['id']))),
-                        {'data': {'count': real_count}}))
-
+            clientf.query(
+                query.update(
+                    query.select('ref', query.get(query.match(query.index("courses_by_id"), cource['id']))),
+                    {'data': {'count': real_count}}))
             clientf.query(
                 query.update(query.select('ref', query.get(query.match(query.index("courses_by_id"), cource['id']))),
                              {'data': {'id_tasks': id_tasks}}))

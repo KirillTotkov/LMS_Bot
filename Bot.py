@@ -61,8 +61,8 @@ async def run(message: types.Message):
             else:
                 print("НИЧЕГО НЕ ИЗМЕНИЛОСЬ\n")
                 await bot.send_message(271175530, "НИЧЕГО НЕ ИЗМЕНИЛОСЬ")
-            await asyncio.sleep(20)
-            # await asyncio.sleep(3600)
+            # await asyncio.sleep(20)
+            await asyncio.sleep(3600)
     else:
         await message.answer('Неизвестная команда')
 
