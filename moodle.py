@@ -1,14 +1,28 @@
+import os
+
 import requests
 from bs4 import BeautifulSoup
 from faunadb import query
 from faunadb.client import FaunaClient
-import os
+
 from database import get_all_cource
 
 fauna_key = os.environ['FAUNAKEY']
 lmskey = os.environ['LMSKEY']
 clientf = FaunaClient(fauna_key)
+data = get_all_cource()
 
+
+# def get_number_courses():
+#     request = f'https://lms.syktsu.ru/webservice/rest/server.php?wstoken={lmskey}' \
+#               f'&wsfunction=core_course_get_enrolled_courses_by_timeline_classification&' \
+#               f'classification=all&moodlewsrestformat=json'
+#
+#     result = requests.get(request, headers={"User-Agent": "Mozilla/5.0"})
+#     all_cource = result.json()['courses']
+#     print(len(data))
+#     return len(all_cource)
+# get_number_courses()
 
 def get_count_in_lms(id):
     request = f'https://lms.syktsu.ru/webservice/rest/server.php?wstoken={lmskey}&' \
@@ -18,7 +32,25 @@ def get_count_in_lms(id):
     data = result.json()
     tasks_cource = [x for x in data if len(x['modules']) != 0]
     tasks_list = []
+    summary_text = ''
     for i in tasks_cource:
+        # print(i)
+
+        summary_html = i['summary']
+        if summary_html != '':
+            # print(summary)
+            soup = BeautifulSoup(summary_html, 'lxml')
+            blocks = soup.find_all('p')
+            for block in blocks:
+                summary_text += block.getText(separator="\n").strip()
+            tasks_list.append(
+                {
+                    'id': i['id'],
+                    'name': i['name'],
+                    'summary': summary_text
+                }
+            )
+            summary_text = ''
         for j in i.get('modules'):
             if 'description' not in j.keys():
                 tasks_list.append(
@@ -46,17 +78,24 @@ def get_count_in_lms(id):
                         'description': soup
                     }
                 )
+
     return tasks_list
 
 
 def collect_data():
-    data = get_all_cource()
     answer_data = []
     for cource in data:
         tasks_list = get_count_in_lms(cource['id'])
 
         id_tasks = [x['id'] for x in tasks_list]  # id заданий с Moodle
         diff_id = list(set(cource['id_tasks']) ^ set(id_tasks))  # id новых заданий
+        # try:
+        #     diff_id = list(set(cource['id_tasks']) ^ set(id_tasks))  # id новых заданий
+        # except:
+        #     print("ERRROORORR")
+        #     clientf.query(
+        #         query.update(query.select('ref', query.get(query.match(query.index("courses_by_id"), cource['id']))),
+        #                      {'data': {'id_tasks': id_tasks}}))
 
         if len(diff_id) > 0:
             for task in tasks_list:
@@ -65,6 +104,13 @@ def collect_data():
                     if id == new_id:
                         task['fullname'] = cource['fullname']
                         answer_data.append(task)
+            real_count = len(tasks_list)
+            if len(id_tasks) < len(cource['id_tasks']):
+                print("ERROR MOODLE.py")
+                clientf.query(
+                    query.update(
+                        query.select('ref', query.get(query.match(query.index("courses_by_id"), cource['id']))),
+                        {'data': {'count': real_count}}))
 
             clientf.query(
                 query.update(query.select('ref', query.get(query.match(query.index("courses_by_id"), cource['id']))),
