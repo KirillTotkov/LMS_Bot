@@ -97,6 +97,13 @@ def collect_data():
         #         query.update(query.select('ref', query.get(query.match(query.index("courses_by_id"), cource['id']))),
         #                      {'data': {'id_tasks': id_tasks}}))
 
+        real_count = len(tasks_list)
+        if real_count!=cource['count']:
+            clientf.query(
+                query.update(
+                    query.select('ref', query.get(query.match(query.index("courses_by_id"), cource['id']))),
+                    {'data': {'count': real_count}}))
+
         if len(diff_id) > 0:
             for task in tasks_list:
                 id = task['id']
@@ -104,11 +111,6 @@ def collect_data():
                     if id == new_id:
                         task['fullname'] = cource['fullname']
                         answer_data.append(task)
-            real_count = len(tasks_list)
-            clientf.query(
-                query.update(
-                    query.select('ref', query.get(query.match(query.index("courses_by_id"), cource['id']))),
-                    {'data': {'count': real_count}}))
             clientf.query(
                 query.update(query.select('ref', query.get(query.match(query.index("courses_by_id"), cource['id']))),
                              {'data': {'id_tasks': id_tasks}}))
