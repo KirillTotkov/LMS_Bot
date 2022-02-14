@@ -1,6 +1,7 @@
 import asyncio
 import logging
 import os
+import traceback
 
 from aiogram import Bot, Dispatcher, executor, types
 from faunadb.client import FaunaClient
@@ -57,6 +58,7 @@ async def run(message: types.Message):
 
                     except:
                         set_acive(user['user_id'], 0)
+                        traceback.print_exc()
                         print("ERROR Bot.py \n")
             else:
                 print("НИЧЕГО НЕ ИЗМЕНИЛОСЬ\n")
