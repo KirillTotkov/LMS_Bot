@@ -84,7 +84,8 @@ def collect_data():
                 query.update(
                     query.select('ref', query.get(query.match(query.index("courses_by_id"), cource['id']))),
                     {'data': {'count': real_count}}))
-
+            
+        print(diff_id)
         if len(diff_id) > 0:
             for task in tasks_list:
                 id = task['id']
@@ -95,7 +96,7 @@ def collect_data():
             clientf.query(
                 query.update(query.select('ref', query.get(query.match(query.index("courses_by_id"), cource['id']))),
                              {'data': {'id_tasks': id_tasks}}))
-
+    print(answer_data)
     return answer_data
 
 
