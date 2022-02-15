@@ -10,7 +10,6 @@ from database import get_all_cource
 fauna_key = os.environ['FAUNAKEY']
 lmskey = os.environ['LMSKEY']
 clientf = FaunaClient(fauna_key)
-data = get_all_cource()
 
 def get_count_in_lms(id):
     request = f'https://lms.syktsu.ru/webservice/rest/server.php?wstoken={lmskey}&' \
@@ -68,6 +67,7 @@ def get_count_in_lms(id):
 
 
 def collect_data():
+    data = get_all_cource()
     answer_data = []
     for cource in data:
         tasks_list = get_count_in_lms(cource['id'])
