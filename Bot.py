@@ -62,7 +62,7 @@ async def run(message: types.Message):
                         print("ERROR Bot.py \n")
             else:
                 print("НИЧЕГО НЕ ИЗМЕНИЛОСЬ\n")
-                await bot.send_message(271175530, "НИЧЕГО НЕ ИЗМЕНИЛОСЬ")
+                #await bot.send_message(271175530, "НИЧЕГО НЕ ИЗМЕНИЛОСЬ")
             # await asyncio.sleep(20)
             answer_data.clear()
             await asyncio.sleep(1800)
