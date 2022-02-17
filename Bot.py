@@ -36,6 +36,7 @@ async def run(message: types.Message):
         while True:
             answer_data = collect_data()
             if len(answer_data) != 0:
+                print("ОТПРАВКА \n")
                 users = get_users()
                 for user in users:
                     try:
